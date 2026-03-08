@@ -1,4 +1,4 @@
-# api-response-kit
+# api-res-kit
 
 > Standardize your Node.js API responses with a consistent, type-safe format.
 
@@ -33,14 +33,14 @@ One standard format for every response:
 ## Installation
 
 ```bash
-npm install api-response-kit
+npm install api-res-kit
 ```
 
 ## Quick Start
 
 ```typescript
 import express from "express"
-import { success, error, created, notFound, validationError, paginated } from "api-response-kit"
+import { success, error, created, notFound, validationError, paginated } from "api-res-kit"
 
 const app = express()
 
@@ -156,7 +156,7 @@ Response:
 ### Express Middleware
 
 ```typescript
-import { apiResponseMiddleware } from "api-response-kit/adapters/express"
+import { apiResponseMiddleware } from "api-res-kit/adapters/express"
 
 app.use(apiResponseMiddleware())
 
@@ -171,7 +171,7 @@ app.get("/users", (req, res) => {
 ### NestJS Interceptor
 
 ```typescript
-import { ApiResponseInterceptor } from "api-response-kit/adapters/nestjs"
+import { ApiResponseInterceptor } from "api-res-kit/adapters/nestjs"
 
 @Module({
   providers: [
@@ -184,7 +184,7 @@ export class AppModule {}
 ### Fastify Plugin
 
 ```typescript
-import apiResponsePlugin from "api-response-kit/adapters/fastify"
+import apiResponsePlugin from "api-res-kit/adapters/fastify"
 
 fastify.register(apiResponsePlugin)
 
