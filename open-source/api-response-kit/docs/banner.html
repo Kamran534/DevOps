@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1200, height=630">
+<title>api-res-kit Banner</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;600;800&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 1200px;
+    height: 630px;
+    overflow: hidden;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .banner {
+    width: 1200px;
+    height: 630px;
+    background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 40%, #16213e 70%, #0f3460 100%);
+    position: relative;
+    display: flex;
+    padding: 60px 70px;
+    gap: 50px;
+  }
+
+  /* Decorative grid */
+  .banner::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  /* Glow orbs */
+  .orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.4;
+  }
+  .orb-1 { width: 300px; height: 300px; background: #4361ee; top: -80px; right: 100px; }
+  .orb-2 { width: 200px; height: 200px; background: #7209b7; bottom: -50px; left: 200px; opacity: 0.3; }
+  .orb-3 { width: 150px; height: 150px; background: #06d6a0; bottom: 50px; right: -30px; opacity: 0.25; }
+
+  .left {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    z-index: 1;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(67, 97, 238, 0.15);
+    border: 1px solid rgba(67, 97, 238, 0.3);
+    padding: 8px 18px;
+    border-radius: 50px;
+    font-size: 14px;
+    color: #4cc9f0;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    width: fit-content;
+    margin-bottom: 28px;
+  }
+
+  .badge::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    background: #06d6a0;
+    border-radius: 50%;
+    box-shadow: 0 0 8px #06d6a0;
+  }
+
+  .title {
+    font-size: 56px;
+    font-weight: 800;
+    color: #ffffff;
+    line-height: 1.1;
+    margin-bottom: 8px;
+    letter-spacing: -1px;
+  }
+
+  .title span {
+    background: linear-gradient(135deg, #4361ee, #4cc9f0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .subtitle {
+    font-size: 20px;
+    color: #8892b0;
+    line-height: 1.5;
+    margin-bottom: 32px;
+    max-width: 420px;
+  }
+
+  .install-box {
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 16px 24px;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    width: fit-content;
+  }
+
+  .install-box .dollar {
+    color: #06d6a0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 18px;
+    font-weight: 700;
+  }
+
+  .install-box .cmd {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 18px;
+    color: #e2e8f0;
+    font-weight: 400;
+  }
+
+  .install-box .pkg {
+    color: #4cc9f0;
+    font-weight: 700;
+  }
+
+  .right {
+    width: 440px;
+    display: flex;
+    align-items: center;
+    z-index: 1;
+  }
+
+  .code-window {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  }
+
+  .code-titlebar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 18px;
+    background: rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .dot { width: 12px; height: 12px; border-radius: 50%; }
+  .dot-r { background: #ff5f57; }
+  .dot-y { background: #febc2e; }
+  .dot-g { background: #28c840; }
+
+  .code-titlebar .filename {
+    color: #8892b0;
+    font-size: 13px;
+    font-family: 'JetBrains Mono', monospace;
+    margin-left: 8px;
+  }
+
+  .code-body {
+    padding: 20px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13.5px;
+    line-height: 1.7;
+    color: #e2e8f0;
+  }
+
+  .code-body .kw { color: #c678dd; }
+  .code-body .fn { color: #61afef; }
+  .code-body .str { color: #98c379; }
+  .code-body .obj { color: #e5c07b; }
+  .code-body .cm { color: #5c6370; }
+  .code-body .br { color: #abb2bf; }
+
+  .features {
+    display: flex;
+    gap: 20px;
+    margin-top: 28px;
+  }
+
+  .feature {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #8892b0;
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .feature .icon {
+    width: 20px;
+    height: 20px;
+    background: rgba(6, 214, 160, 0.15);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #06d6a0;
+    font-size: 11px;
+  }
+</style>
+</head>
+<body>
+  <div class="banner">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+
+    <div class="left">
+      <div class="badge">OPEN SOURCE &middot; v1.0.1</div>
+      <div class="title"><span>api-res-kit</span></div>
+      <div class="subtitle">Standardize your Node.js API responses with a consistent, type-safe format.</div>
+      <div class="install-box">
+        <span class="dollar">$</span>
+        <span class="cmd">npm i <span class="pkg">api-res-kit</span></span>
+      </div>
+      <div class="features">
+        <div class="feature"><div class="icon">&#10003;</div> TypeScript</div>
+        <div class="feature"><div class="icon">&#10003;</div> Express</div>
+        <div class="feature"><div class="icon">&#10003;</div> Fastify</div>
+        <div class="feature"><div class="icon">&#10003;</div> NestJS</div>
+        <div class="feature"><div class="icon">&#10003;</div> 0 Deps</div>
+      </div>
+    </div>
+
+    <div class="right">
+      <div class="code-window">
+        <div class="code-titlebar">
+          <div class="dot dot-r"></div>
+          <div class="dot dot-y"></div>
+          <div class="dot dot-g"></div>
+          <span class="filename">app.ts</span>
+        </div>
+        <div class="code-body">
+          <span class="kw">import</span> <span class="br">{</span> <span class="fn">success</span><span class="br">,</span> <span class="fn">error</span> <span class="br">}</span> <span class="kw">from</span> <span class="str">"api-res-kit"</span><br><br>
+          <span class="cm">// Consistent response</span><br>
+          <span class="fn">success</span><span class="br">(</span>res<span class="br">,</span> <span class="br">{</span><br>
+          &nbsp;&nbsp;<span class="obj">message</span><span class="br">:</span> <span class="str">"User created"</span><span class="br">,</span><br>
+          &nbsp;&nbsp;<span class="obj">data</span><span class="br">:</span> user<br>
+          <span class="br">})</span><br><br>
+          <span class="cm">// Standard output:</span><br>
+          <span class="cm">// {</span><br>
+          <span class="cm">//&nbsp;&nbsp; success: true,</span><br>
+          <span class="cm">//&nbsp;&nbsp; message: "User created",</span><br>
+          <span class="cm">//&nbsp;&nbsp; data: { ... },</span><br>
+          <span class="cm">//&nbsp;&nbsp; errors: [],</span><br>
+          <span class="cm">//&nbsp;&nbsp; meta: {}</span><br>
+          <span class="cm">// }</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

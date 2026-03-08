@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>api-res-kit — Standardize Node.js API Responses</title>
+  <meta name="description" content="A lightweight TypeScript library that standardizes API responses across Express, Fastify, and NestJS.">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ═══ Navbar ═══ -->
+<nav class="navbar">
+  <div class="container">
+    <a href="#" class="logo">
+      <span>api-res-kit</span>
+      <span class="version">v1.0.1</span>
+    </a>
+    <button class="nav-toggle"><span></span><span></span><span></span></button>
+    <ul class="nav-links">
+      <li><a href="#features">Features</a></li>
+      <li><a href="#api">API</a></li>
+      <li><a href="#adapters">Adapters</a></li>
+      <li><a href="#start">Get Started</a></li>
+      <li>
+        <a href="https://github.com/Kamran534/DevOps/tree/main/open-source/api-response-kit" target="_blank" class="btn-github">
+          <svg viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+          GitHub
+        </a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ═══ Hero ═══ -->
+<section class="hero">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+  <div class="container hero-content">
+    <div class="badge">OPEN SOURCE &middot; MIT Licensed</div>
+    <h1><span class="gradient">api-res-kit</span></h1>
+    <p class="tagline">Standardize your Node.js API responses with a consistent, type-safe format. Works with Express, Fastify, and NestJS.</p>
+    <div class="hero-actions">
+      <a href="#start" class="btn btn-primary">Get Started</a>
+      <a href="#api" class="btn btn-secondary">View API</a>
+    </div>
+    <div class="install-cmd">
+      <span class="dollar">$</span>
+      <span>npm i <span class="pkg">api-res-kit</span></span>
+      <span class="copy-icon">Copy</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ Problem ═══ -->
+<section id="problem">
+  <div class="container">
+    <div class="text-center">
+      <span class="section-label">The Problem</span>
+      <h2 class="section-title">Your API responses are a mess</h2>
+      <p class="section-desc center">Every endpoint returns a different shape. No consistency, no standard, no predictability.</p>
+    </div>
+
+    <div class="problem-grid">
+      <div class="code-window">
+        <div class="code-titlebar">
+          <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+          <span class="filename">your-api.ts — spot the pattern (there isn't one)</span>
+        </div>
+<pre><code><span class="cm">// Endpoint A — returns "status" + "result"</span>
+<span class="var">res</span><span class="punc">.</span><span class="mth">json</span><span class="punc">(</span><span class="br">{</span> <span class="obj">status</span><span class="punc">:</span> <span class="bool">true</span><span class="punc">,</span> <span class="obj">result</span><span class="punc">:</span> <span class="br">{</span> <span class="obj">id</span><span class="punc">:</span> <span class="num">1</span> <span class="br">}</span> <span class="br">}</span><span class="punc">)</span>
+
+<span class="cm">// Endpoint B — returns "success" + "data"</span>
+<span class="var">res</span><span class="punc">.</span><span class="mth">json</span><span class="punc">(</span><span class="br">{</span> <span class="obj">success</span><span class="punc">:</span> <span class="bool">true</span><span class="punc">,</span> <span class="obj">data</span><span class="punc">:</span> <span class="br">{</span> <span class="obj">id</span><span class="punc">:</span> <span class="num">1</span> <span class="br">}</span> <span class="br">}</span><span class="punc">)</span>
+
+<span class="cm">// Endpoint C — returns "ok" + "payload"</span>
+<span class="var">res</span><span class="punc">.</span><span class="mth">json</span><span class="punc">(</span><span class="br">{</span> <span class="obj">ok</span><span class="punc">:</span> <span class="num">1</span><span class="punc">,</span> <span class="obj">payload</span><span class="punc">:</span> <span class="br">{</span> <span class="obj">id</span><span class="punc">:</span> <span class="num">1</span> <span class="br">}</span> <span class="br">}</span><span class="punc">)</span>
+
+<span class="cm">// Endpoint D — completely different error shape</span>
+<span class="var">res</span><span class="punc">.</span><span class="mth">status</span><span class="punc">(</span><span class="num">404</span><span class="punc">)</span><span class="punc">.</span><span class="mth">json</span><span class="punc">(</span><span class="br">{</span> <span class="obj">error</span><span class="punc">:</span> <span class="str">"Not found"</span> <span class="br">}</span><span class="punc">)</span>
+
+<span class="cm">// Endpoint E — yet another format</span>
+<span class="var">res</span><span class="punc">.</span><span class="mth">json</span><span class="punc">(</span><span class="br">{</span> <span class="obj">code</span><span class="punc">:</span> <span class="num">200</span><span class="punc">,</span> <span class="obj">msg</span><span class="punc">:</span> <span class="str">"ok"</span><span class="punc">,</span> <span class="obj">body</span><span class="punc">:</span> <span class="br">{}</span> <span class="br">}</span><span class="punc">)</span></code></pre>
+      </div>
+
+      <div class="problem-right">
+        <div class="problem-item">
+          <div class="problem-icon red">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="#ff5f57"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418"/></svg>
+          </div>
+          <div>
+            <h4>Frontend Can't Predict the Shape</h4>
+            <p>Is the data in <code>result</code>, <code>data</code>, <code>payload</code>, or <code>body</code>? Frontend devs write different parsing logic for every single endpoint.</p>
+          </div>
+        </div>
+        <div class="problem-item">
+          <div class="problem-icon yellow">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="#febc2e"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3"/></svg>
+          </div>
+          <div>
+            <h4>Mobile Apps Break Silently</h4>
+            <p>One backend dev changes the response format, and the iOS and Android apps crash in production with no warning.</p>
+          </div>
+        </div>
+        <div class="problem-item">
+          <div class="problem-icon orange">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="#ff9f43"><path stroke-linecap="round" stroke-linejoin="round" d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z"/></svg>
+          </div>
+          <div>
+            <h4>New Devs Waste Hours</h4>
+            <p>No documentation, no convention. Every new team member has to reverse-engineer each endpoint to understand the response format.</p>
+          </div>
+        </div>
+        <div class="problem-item">
+          <div class="problem-icon purple">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="#7209b7"><path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m9.86-2.939a4.5 4.5 0 00-1.242-7.244l4.5-4.5a4.5 4.5 0 016.364 6.364l-1.757 1.757"/></svg>
+          </div>
+          <div>
+            <h4>API Integrations Fail</h4>
+            <p>Third-party consumers can't build reliable integrations when your error format changes between endpoints.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ Solution ═══ -->
+<section class="format-section" id="solution">
+  <div class="container">
+    <div class="text-center">
+      <span class="section-label">The Solution</span>
+      <h2 class="section-title">One format. Every response.</h2>
+      <p class="section-desc center">Drop in api-res-kit and every response — success, error, validation, paginated — follows the same predictable structure.</p>
+    </div>
+
+    <div class="format-grid">
+      <div class="format-features">
+        <div class="format-feature">
+          <div class="format-check">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="#06d6a0"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>
+          </div>
+          <div>
+            <h4><code>success</code></h4>
+            <p>Boolean flag — instantly know if the request succeeded or failed. No guessing.</p>
+          </div>
+        </div>
+        <div class="format-feature">
+          <div class="format-check">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="#06d6a0"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>
+          </div>
+          <div>
+            <h4><code>message</code></h4>
+            <p>Human-readable status message. Show it directly in your UI toast or alert.</p>
+          </div>
+        </div>
+        <div class="format-feature">
+          <div class="format-check">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="#06d6a0"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>
+          </div>
+          <div>
+            <h4><code>data</code></h4>
+            <p>The actual payload — always in the same key. Users, posts, tokens — it's always <code>data</code>.</p>
+          </div>
+        </div>
+        <div class="format-feature">
+          <div class="format-check">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="#06d6a0"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>
+          </div>
+          <div>
+            <h4><code>errors</code></h4>
+            <p>Field-level error array with codes. Wire directly to form validation on the frontend.</p>
+          </div>
+        </div>
+        <div class="format-feature">
+          <div class="format-check">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="#06d6a0"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>
+          </div>
+          <div>
+            <h4><code>meta</code></h4>
+            <p>Extensible metadata — pagination info, request IDs, timestamps, API version.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="code-window solution-code">
+        <div class="code-titlebar">
+          <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+          <span class="filename">response.json — every response, same shape</span>
+        </div>
+<pre><code><span class="br">{</span>
+  <span class="obj">"success"</span><span class="punc">:</span> <span class="bool">true</span><span class="punc">,</span>
+  <span class="obj">"message"</span><span class="punc">:</span> <span class="str">"User created successfully"</span><span class="punc">,</span>
+  <span class="obj">"data"</span><span class="punc">:</span> <span class="br">{</span>
+    <span class="obj">"id"</span><span class="punc">:</span> <span class="num">1</span><span class="punc">,</span>
+    <span class="obj">"name"</span><span class="punc">:</span> <span class="str">"Alice"</span><span class="punc">,</span>
+    <span class="obj">"email"</span><span class="punc">:</span> <span class="str">"alice@example.com"</span>
+  <span class="br">}</span><span class="punc">,</span>
+  <span class="obj">"errors"</span><span class="punc">:</span> <span class="br">[]</span><span class="punc">,</span>
+  <span class="obj">"meta"</span><span class="punc">:</span> <span class="br">{}</span>
+<span class="br">}</span></code></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ Features ═══ -->
+<section id="features">
+  <div class="container text-center">
+    <span class="section-label">Features</span>
+    <h2 class="section-title">Everything you need</h2>
+    <p class="section-desc center">Built for real-world backend development. Type-safe, framework-agnostic, zero dependencies.</p>
+
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon blue">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        </div>
+        <h3>Success Responses</h3>
+        <p>success(), created(), noContent() — standard 2xx responses with consistent format.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon green">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"/></svg>
+        </div>
+        <h3>Error Responses</h3>
+        <p>error(), notFound(), unauthorized(), forbidden() — every error follows the same shape.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon purple">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M11.35 3.836c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m8.9-4.414c.376.023.75.05 1.124.08 1.131.094 1.976 1.057 1.976 2.192V16.5A2.25 2.25 0 0118 18.75h-2.25m-7.5-10.5H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V18.75m-7.5-10.5h6.375c.621 0 1.125.504 1.125 1.125v9.375m-8.25-3l1.5 1.5 3-3.75"/></svg>
+        </div>
+        <h3>Validation Errors</h3>
+        <p>Field-level validation errors with custom codes. Perfect for form feedback.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon cyan">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 12c0-1.232-.046-2.453-.138-3.662a4.006 4.006 0 00-3.7-3.7 48.678 48.678 0 00-7.324 0 4.006 4.006 0 00-3.7 3.7c-.017.22-.032.441-.046.662M19.5 12l3-3m-3 3l-3-3m-12 3c0 1.232.046 2.453.138 3.662a4.006 4.006 0 003.7 3.7 48.656 48.656 0 007.324 0 4.006 4.006 0 003.7-3.7c.017-.22.032-.441.046-.662M4.5 12l3 3m-3-3l-3 3"/></svg>
+        </div>
+        <h3>Pagination</h3>
+        <p>Auto-calculated totalPages, hasNextPage, hasPrevPage in the meta object.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon yellow">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5"/></svg>
+        </div>
+        <h3>TypeScript First</h3>
+        <p>Full generic support. Your data types flow through the response builders.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon pink">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"/></svg>
+        </div>
+        <h3>Zero Dependencies</h3>
+        <p>Lightweight and fast. No bloat, no supply chain risk. Just pure utility.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ API Reference ═══ -->
+<section class="api-section" id="api">
+  <div class="container text-center">
+    <span class="section-label">API Reference</span>
+    <h2 class="section-title">Simple, intuitive functions</h2>
+    <p class="section-desc center">Clean, type-safe functions for every response scenario.</p>
+
+    <div class="api-tabs">
+      <button class="api-tab active" data-tab="tab-success">Success</button>
+      <button class="api-tab" data-tab="tab-errors">Errors</button>
+      <button class="api-tab" data-tab="tab-validation">Validation</button>
+      <button class="api-tab" data-tab="tab-pagination">Pagination</button>
+    </div>
+
+    <!-- Success Tab -->
+    <div id="tab-success" class="api-content active">
+      <div class="api-grid">
+        <div class="api-card">
+          <div class="api-card-header">
+            <h4>success(res, options?)</h4>
+            <span class="status-badge s200">200</span>
+          </div>
+          <div class="api-card-body">
+<pre><code><span class="kw">import</span> <span class="br">{</span> <span class="fn">success</span> <span class="br">}</span> <span class="kw">from</span> <span class="str">"api-res-kit"</span>
+
+<span class="var">app</span><span class="punc">.</span><span class="mth">get</span><span class="punc">(</span><span class="str">"/users"</span><span class="punc">,</span> <span class="kw">async</span> <span class="punc">(</span><span class="var">req</span><span class="punc">,</span> <span class="var">res</span><span class="punc">)</span> <span class="kw">=></span> <span class="br">{</span>
+  <span class="kw">const</span> users <span class="punc">=</span> <span class="kw">await</span> <span class="var">User</span><span class="punc">.</span><span class="mth">find</span><span class="punc">()</span>
+
+  <span class="fn">success</span><span class="punc">(</span><span class="var">res</span><span class="punc">,</span> <span class="br">{</span>
+    <span class="obj">message</span><span class="punc">:</span> <span class="str">"Users fetched"</span><span class="punc">,</span>
+    <span class="obj">data</span><span class="punc">:</span> users
+  <span class="br">}</span><span class="punc">)</span>
+<span class="br">}</span><span class="punc">)</span></code></pre>
+          </div>
+        </div>
+        <div class="api-card">
+          <div class="api-card-header">
+            <h4>created(res, options?)</h4>
+            <span class="status-badge s201">201</span>
+          </div>
+          <div class="api-card-body">
+<pre><code><span class="kw">import</span> <span class="br">{</span> <span class="fn">created</span> <span class="br">}</span> <span class="kw">from</span> <span class="str">"api-res-kit"</span>
+
+<span class="var">app</span><span class="punc">.</span><span class="mth">post</span><span class="punc">(</span><span class="str">"/users"</span><span class="punc">,</span> <span class="kw">async</span> <span class="punc">(</span><span class="var">req</span><span class="punc">,</span> <span class="var">res</span><span class="punc">)</span> <span class="kw">=></span> <span class="br">{</span>
+  <span class="kw">const</span> user <span class="punc">=</span> <span class="kw">await</span> <span class="var">User</span><span class="punc">.</span><span class="mth">create</span><span class="punc">(</span><span class="var">req</span><span class="punc">.</span>body<span class="punc">)</span>
+
+  <span class="fn">created</span><span class="punc">(</span><span class="var">res</span><span class="punc">,</span> <span class="br">{</span>
+    <span class="obj">message</span><span class="punc">:</span> <span class="str">"User created"</span><span class="punc">,</span>
+    <span class="obj">data</span><span class="punc">:</span> user
+  <span class="br">}</span><span class="punc">)</span>
+<span class="br">}</span><span class="punc">)</span></code></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Errors Tab -->
+    <div id="tab-errors" class="api-content">
+      <div class="api-grid">
+        <div class="api-card">
+          <div class="api-card-header">
+            <h4>error(res, options?)</h4>
+            <span class="status-badge s4xx">500</span>
+          </div>
+          <div class="api-card-body">
+<pre><code><span class="kw">import</span> <span class="br">{</span> <span class="fn">error</span> <span class="br">}</span> <span class="kw">from</span> <span class="str">"api-res-kit"</span>
+
+<span class="var">app</span><span class="punc">.</span><span class="mth">get</span><span class="punc">(</span><span class="str">"/crash"</span><span class="punc">,</span> <span class="punc">(</span><span class="var">req</span><span class="punc">,</span> <span class="var">res</span><span class="punc">)</span> <span class="kw">=></span> <span class="br">{</span>
+  <span class="fn">error</span><span class="punc">(</span><span class="var">res</span><span class="punc">,</span> <span class="br">{</span>
+    <span class="obj">message</span><span class="punc">:</span> <span class="str">"Database failed"</span><span class="punc">,</span>
+    <span class="obj">code</span><span class="punc">:</span> <span class="num">500</span>
+  <span class="br">}</span><span class="punc">)</span>
+<span class="br">}</span><span class="punc">)</span></code></pre>
+          </div>
+        </div>
+        <div class="api-card">
+          <div class="api-card-header">
+            <h4>notFound(res, message?)</h4>
+            <span class="status-badge s4xx">404</span>
+          </div>
+          <div class="api-card-body">
+<pre><code><span class="kw">import</span> <span class="br">{</span> <span class="fn">notFound</span> <span class="br">}</span> <span class="kw">from</span> <span class="str">"api-res-kit"</span>
+
+<span class="var">app</span><span class="punc">.</span><span class="mth">get</span><span class="punc">(</span><span class="str">"/users/:id"</span><span class="punc">,</span> <span class="kw">async</span> <span class="punc">(</span><span class="var">req</span><span class="punc">,</span> <span class="var">res</span><span class="punc">)</span> <span class="kw">=></span> <span class="br">{</span>
+  <span class="kw">const</span> user <span class="punc">=</span> <span class="kw">await</span> <span class="var">User</span><span class="punc">.</span><span class="mth">findById</span><span class="punc">(</span><span class="var">req</span><span class="punc">.</span>params<span class="punc">.</span>id<span class="punc">)</span>
+  <span class="kw">if</span> <span class="punc">(</span><span class="punc">!</span>user<span class="punc">)</span>
+    <span class="kw">return</span> <span class="fn">notFound</span><span class="punc">(</span><span class="var">res</span><span class="punc">,</span> <span class="str">"User not found"</span><span class="punc">)</span>
+<span class="br">}</span><span class="punc">)</span></code></pre>
+          </div>
+        </div>
+        <div class="api-card">
+          <div class="api-card-header">
+            <h4>unauthorized(res, message?)</h4>
+            <span class="status-badge s4xx">401</span>
+          </div>
+          <div class="api-card-body">
+<pre><code><span class="kw">import</span> <span class="br">{</span> <span class="fn">unauthorized</span> <span class="br">}</span> <span class="kw">from</span> <span class="str">"api-res-kit"</span>
+
+<span class="var">app</span><span class="punc">.</span><span class="mth">post</span><span class="punc">(</span><span class="str">"/login"</span><span class="punc">,</span> <span class="kw">async</span> <span class="punc">(</span><span class="var">req</span><span class="punc">,</span> <span class="var">res</span><span class="punc">)</span> <span class="kw">=></span> <span class="br">{</span>
+  <span class="kw">const</span> valid <span class="punc">=</span> <span class="kw">await</span> <span class="mth">checkCredentials</span><span class="punc">(</span><span class="var">req</span><span class="punc">.</span>body<span class="punc">)</span>
+  <span class="kw">if</span> <span class="punc">(</span><span class="punc">!</span>valid<span class="punc">)</span>
+    <span class="kw">return</span> <span class="fn">unauthorized</span><span class="punc">(</span><span class="var">res</span><span class="punc">,</span> <span class="str">"Invalid token"</span><span class="punc">)</span>
+<span class="br">}</span><span class="punc">)</span></code></pre>
+          </div>
+        </div>
+        <div class="api-card">
+          <div class="api-card-header">
+            <h4>forbidden(res, message?)</h4>
+            <span class="status-badge s4xx">403</span>
+          </div>
+          <div class="api-card-body">
+<pre><code><span class="kw">import</span> <span class="br">{</span> <span class="fn">forbidden</span> <span class="br">}</span> <span class="kw">from</span> <span class="str">"api-res-kit"</span>
+
+<span class="var">app</span><span class="punc">.</span><span class="mth">get</span><span class="punc">(</span><span class="str">"/admin"</span><span class="punc">,</span> <span class="punc">(</span><span class="var">req</span><span class="punc">,</span> <span class="var">res</span><span class="punc">)</span> <span class="kw">=></span> <span class="br">{</span>
+  <span class="kw">if</span> <span class="punc">(</span><span class="var">req</span><span class="punc">.</span>user<span class="punc">.</span>role <span class="punc">!==</span> <span class="str">"admin"</span><span class="punc">)</span>
+    <span class="kw">return</span> <span class="fn">forbidden</span><span class="punc">(</span><span class="var">res</span><span class="punc">,</span> <span class="str">"Admin access required"</span><span class="punc">)</span>
+<span class="br">}</span><span class="punc">)</span></code></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Validation Tab -->
+    <div id="tab-validation" class="api-content">
+      <div class="api-grid">
+        <div class="api-card">
+          <div class="api-card-header">
+            <h4>validationError(res, errors)</h4>
+            <span class="status-badge s422">422</span>
+          </div>
+          <div class="api-card-body">
+<pre><code><span class="kw">import</span> <span class="br">{</span> <span class="fn">validationError</span> <span class="br">}</span> <span class="kw">from</span> <span class="str">"api-res-kit"</span>
+
+<span class="var">app</span><span class="punc">.</span><span class="mth">post</span><span class="punc">(</span><span class="str">"/register"</span><span class="punc">,</span> <span class="punc">(</span><span class="var">req</span><span class="punc">,</span> <span class="var">res</span><span class="punc">)</span> <span class="kw">=></span> <span class="br">{</span>
+  <span class="fn">validationError</span><span class="punc">(</span><span class="var">res</span><span class="punc">,</span> <span class="br">[</span>
+    <span class="br">{</span> <span class="obj">field</span><span class="punc">:</span> <span class="str">"email"</span><span class="punc">,</span> <span class="obj">message</span><span class="punc">:</span> <span class="str">"Required"</span> <span class="br">}</span><span class="punc">,</span>
+    <span class="br">{</span> <span class="obj">field</span><span class="punc">:</span> <span class="str">"password"</span><span class="punc">,</span> <span class="obj">message</span><span class="punc">:</span> <span class="str">"Min 8 chars"</span> <span class="br">}</span>
+  <span class="br">]</span><span class="punc">)</span>
+<span class="br">}</span><span class="punc">)</span></code></pre>
+          </div>
+        </div>
+        <div class="api-card">
+          <div class="api-card-header">
+            <h4>Response Output</h4>
+            <span class="status-badge s422">422</span>
+          </div>
+          <div class="api-card-body">
+<pre><code><span class="br">{</span>
+  <span class="obj">"success"</span><span class="punc">:</span> <span class="bool">false</span><span class="punc">,</span>
+  <span class="obj">"message"</span><span class="punc">:</span> <span class="str">"Validation failed"</span><span class="punc">,</span>
+  <span class="obj">"data"</span><span class="punc">:</span> <span class="bool">null</span><span class="punc">,</span>
+  <span class="obj">"errors"</span><span class="punc">:</span> <span class="br">[</span>
+    <span class="br">{</span> <span class="obj">"field"</span><span class="punc">:</span> <span class="str">"email"</span><span class="punc">,</span>
+      <span class="obj">"message"</span><span class="punc">:</span> <span class="str">"Required"</span><span class="punc">,</span>
+      <span class="obj">"code"</span><span class="punc">:</span> <span class="str">"VALIDATION_ERROR"</span> <span class="br">}</span>
+  <span class="br">]</span><span class="punc">,</span>
+  <span class="obj">"meta"</span><span class="punc">:</span> <span class="br">{}</span>
+<span class="br">}</span></code></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pagination Tab -->
+    <div id="tab-pagination" class="api-content">
+      <div class="api-grid">
+        <div class="api-card">
+          <div class="api-card-header">
+            <h4>paginated(res, options)</h4>
+            <span class="status-badge s200">200</span>
+          </div>
+          <div class="api-card-body">
+<pre><code><span class="kw">import</span> <span class="br">{</span> <span class="fn">paginated</span> <span class="br">}</span> <span class="kw">from</span> <span class="str">"api-res-kit"</span>
+
+<span class="var">app</span><span class="punc">.</span><span class="mth">get</span><span class="punc">(</span><span class="str">"/posts"</span><span class="punc">,</span> <span class="kw">async</span> <span class="punc">(</span><span class="var">req</span><span class="punc">,</span> <span class="var">res</span><span class="punc">)</span> <span class="kw">=></span> <span class="br">{</span>
+  <span class="kw">const</span> posts <span class="punc">=</span> <span class="kw">await</span> <span class="var">Post</span><span class="punc">.</span><span class="mth">find</span><span class="punc">()</span>
+
+  <span class="fn">paginated</span><span class="punc">(</span><span class="var">res</span><span class="punc">,</span> <span class="br">{</span>
+    <span class="obj">data</span><span class="punc">:</span> posts<span class="punc">,</span>
+    <span class="obj">page</span><span class="punc">:</span> <span class="num">2</span><span class="punc">,</span>
+    <span class="obj">perPage</span><span class="punc">:</span> <span class="num">10</span><span class="punc">,</span>
+    <span class="obj">total</span><span class="punc">:</span> <span class="num">50</span>
+  <span class="br">}</span><span class="punc">)</span>
+<span class="br">}</span><span class="punc">)</span></code></pre>
+          </div>
+        </div>
+        <div class="api-card">
+          <div class="api-card-header">
+            <h4>Response Output</h4>
+            <span class="status-badge s200">200</span>
+          </div>
+          <div class="api-card-body">
+<pre><code><span class="br">{</span>
+  <span class="obj">"success"</span><span class="punc">:</span> <span class="bool">true</span><span class="punc">,</span>
+  <span class="obj">"message"</span><span class="punc">:</span> <span class="str">"Success"</span><span class="punc">,</span>
+  <span class="obj">"data"</span><span class="punc">:</span> <span class="br">[</span><span class="punc">...</span><span class="br">]</span><span class="punc">,</span>
+  <span class="obj">"errors"</span><span class="punc">:</span> <span class="br">[]</span><span class="punc">,</span>
+  <span class="obj">"meta"</span><span class="punc">:</span> <span class="br">{</span>
+    <span class="obj">"pagination"</span><span class="punc">:</span> <span class="br">{</span>
+      <span class="obj">"page"</span><span class="punc">:</span> <span class="num">2</span><span class="punc">,</span>
+      <span class="obj">"perPage"</span><span class="punc">:</span> <span class="num">10</span><span class="punc">,</span>
+      <span class="obj">"total"</span><span class="punc">:</span> <span class="num">50</span><span class="punc">,</span>
+      <span class="obj">"totalPages"</span><span class="punc">:</span> <span class="num">5</span><span class="punc">,</span>
+      <span class="obj">"hasNextPage"</span><span class="punc">:</span> <span class="bool">true</span><span class="punc">,</span>
+      <span class="obj">"hasPrevPage"</span><span class="punc">:</span> <span class="bool">true</span>
+    <span class="br">}</span>
+  <span class="br">}</span>
+<span class="br">}</span></code></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ Adapters ═══ -->
+<section id="adapters">
+  <div class="container text-center">
+    <span class="section-label">Framework Adapters</span>
+    <h2 class="section-title">Works with your stack</h2>
+    <p class="section-desc center">Drop-in adapters for the most popular Node.js frameworks.<br>One import, zero config — just plug in and go.</p>
+
+    <div class="adapters-grid">
+      <div class="adapter-card">
+        <div class="adapter-info">
+          <div class="adapter-logo express">
+            <svg viewBox="0 0 64 64" width="48" height="48" fill="none">
+              <rect x="4" y="4" width="56" height="56" rx="14" stroke="#68a063" stroke-width="3" fill="none"/>
+              <text x="32" y="42" text-anchor="middle" fill="#68a063" font-size="28" font-weight="700" font-family="monospace">Ex</text>
+            </svg>
+          </div>
+          <h3>Express</h3>
+          <p class="adapter-type">Middleware</p>
+          <p class="adapter-desc">Register once with <code>app.use()</code> — every route gets helper methods on <code>res</code> automatically.</p>
+        </div>
+        <div class="code-window">
+<pre><code><span class="kw">import</span> <span class="punc">{</span> <span class="fn">apiResponseMiddleware</span> <span class="punc">}</span>
+  <span class="kw">from</span> <span class="str">"api-res-kit/adapters/express"</span>
+
+<span class="var">app</span><span class="punc">.</span><span class="mth">use</span><span class="br">(</span><span class="fn">apiResponseMiddleware</span><span class="br">(</span><span class="br">)</span><span class="br">)</span>
+
+<span class="var">app</span><span class="punc">.</span><span class="mth">get</span><span class="br">(</span><span class="str">"/users"</span><span class="punc">,</span> <span class="br">(</span><span class="var">req</span><span class="punc">,</span> <span class="var">res</span><span class="br">)</span> <span class="kw">=></span> <span class="br">{</span>
+  <span class="var">res</span><span class="punc">.</span><span class="mth">apiSuccess</span><span class="br">(</span><span class="punc">{</span> <span class="obj">data</span><span class="punc">:</span> <span class="var">users</span> <span class="punc">}</span><span class="br">)</span>
+<span class="br">}</span><span class="br">)</span></code></pre>
+        </div>
+      </div>
+
+      <div class="adapter-card">
+        <div class="adapter-info">
+          <div class="adapter-logo fastify">
+            <svg viewBox="0 0 64 64" width="48" height="48" fill="none">
+              <rect x="4" y="4" width="56" height="56" rx="14" stroke="#fff" stroke-width="3" fill="none"/>
+              <text x="32" y="42" text-anchor="middle" fill="#fff" font-size="28" font-weight="700" font-family="monospace">Fy</text>
+            </svg>
+          </div>
+          <h3>Fastify</h3>
+          <p class="adapter-type">Plugin</p>
+          <p class="adapter-desc">Register the plugin and all reply objects gain standardized response decorators.</p>
+        </div>
+        <div class="code-window">
+<pre><code><span class="kw">import</span> <span class="fn">apiPlugin</span>
+  <span class="kw">from</span> <span class="str">"api-res-kit/adapters/fastify"</span>
+
+<span class="var">fastify</span><span class="punc">.</span><span class="mth">register</span><span class="br">(</span><span class="fn">apiPlugin</span><span class="br">)</span>
+
+<span class="var">fastify</span><span class="punc">.</span><span class="mth">get</span><span class="br">(</span><span class="str">"/users"</span><span class="punc">,</span> <span class="br">(</span><span class="var">req</span><span class="punc">,</span> <span class="var">reply</span><span class="br">)</span> <span class="kw">=></span> <span class="br">{</span>
+  <span class="var">reply</span><span class="punc">.</span><span class="mth">apiSuccess</span><span class="br">(</span><span class="punc">{</span> <span class="obj">data</span><span class="punc">:</span> <span class="var">users</span> <span class="punc">}</span><span class="br">)</span>
+<span class="br">}</span><span class="br">)</span></code></pre>
+        </div>
+      </div>
+
+      <div class="adapter-card">
+        <div class="adapter-info">
+          <div class="adapter-logo nestjs">
+            <svg viewBox="0 0 64 64" width="48" height="48" fill="none">
+              <rect x="4" y="4" width="56" height="56" rx="14" stroke="#e0234e" stroke-width="3" fill="none"/>
+              <text x="32" y="42" text-anchor="middle" fill="#e0234e" font-size="28" font-weight="700" font-family="monospace">Ns</text>
+            </svg>
+          </div>
+          <h3>NestJS</h3>
+          <p class="adapter-type">Interceptor</p>
+          <p class="adapter-desc">Add as a global interceptor — all controllers return consistent response shapes.</p>
+        </div>
+        <div class="code-window">
+<pre><code><span class="kw">import</span> <span class="punc">{</span> <span class="fn">ApiResponseInterceptor</span> <span class="punc">}</span>
+  <span class="kw">from</span> <span class="str">"api-res-kit/adapters/nestjs"</span>
+
+<span class="punc">@</span><span class="fn">Module</span><span class="br">(</span><span class="punc">{</span>
+  <span class="obj">providers</span><span class="punc">:</span> <span class="br">[</span><span class="punc">{</span>
+    <span class="obj">provide</span><span class="punc">:</span> <span class="var">APP_INTERCEPTOR</span><span class="punc">,</span>
+    <span class="obj">useClass</span><span class="punc">:</span> <span class="fn">ApiResponseInterceptor</span>
+  <span class="punc">}</span><span class="br">]</span>
+<span class="punc">}</span><span class="br">)</span></code></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ Getting Started ═══ -->
+<section class="api-section" id="start">
+  <div class="container">
+    <div class="text-center">
+      <span class="section-label">Getting Started</span>
+      <h2 class="section-title">Up and running in 2 minutes</h2>
+      <p class="section-desc center">Three simple steps to standardize all your API responses.</p>
+    </div>
+
+    <div class="steps">
+      <!-- Step 1 -->
+      <div class="step">
+        <div class="step-number">1</div>
+        <div class="step-content">
+          <h3>Install the package</h3>
+          <p>Add api-res-kit to your project via npm, yarn, or pnpm.</p>
+          <div class="code-window">
+<pre><code><span class="dollar">$</span> npm i <span class="pkg">api-res-kit</span></code></pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="step">
+        <div class="step-number">2</div>
+        <div class="step-content">
+          <h3>Import the functions</h3>
+          <p>Import only what you need. Tree-shakable and lightweight.</p>
+          <div class="code-window">
+            <div class="code-titlebar">
+              <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+              <span class="filename">app.ts</span>
+            </div>
+<pre><code><span class="kw">import</span> {
+  <span class="fn">success</span>,
+  <span class="fn">created</span>,
+  <span class="fn">error</span>,
+  <span class="fn">notFound</span>,
+  <span class="fn">validationError</span>,
+  <span class="fn">paginated</span>
+} <span class="kw">from</span> <span class="str">"api-res-kit"</span></code></pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="step">
+        <div class="step-number">3</div>
+        <div class="step-content">
+          <h3>Use in your routes</h3>
+          <p>Replace inconsistent res.json() calls with standardized responses.</p>
+          <div class="code-window">
+            <div class="code-titlebar">
+              <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+              <span class="filename">routes/users.ts</span>
+            </div>
+<pre><code><span class="cm">// GET /users — Paginated list</span>
+app.get(<span class="str">"/users"</span>, <span class="kw">async</span> (req, res) => {
+  <span class="kw">const</span> users = <span class="kw">await</span> User.find()
+  <span class="fn">paginated</span>(res, {
+    <span class="obj">data</span>: users,
+    <span class="obj">page</span>: <span class="num">1</span>,
+    <span class="obj">perPage</span>: <span class="num">20</span>,
+    <span class="obj">total</span>: <span class="num">100</span>
+  })
+})
+
+<span class="cm">// POST /users — Create</span>
+app.post(<span class="str">"/users"</span>, <span class="kw">async</span> (req, res) => {
+  <span class="kw">const</span> errors = validate(req.body)
+  <span class="kw">if</span> (errors.length)
+    <span class="kw">return</span> <span class="fn">validationError</span>(res, errors)
+
+  <span class="kw">const</span> user = <span class="kw">await</span> User.create(req.body)
+  <span class="fn">created</span>(res, {
+    <span class="obj">data</span>: user,
+    <span class="obj">message</span>: <span class="str">"User created"</span>
+  })
+})
+
+<span class="cm">// GET /users/:id — Single</span>
+app.get(<span class="str">"/users/:id"</span>, <span class="kw">async</span> (req, res) => {
+  <span class="kw">const</span> user = <span class="kw">await</span> User.findById(req.params.id)
+  <span class="kw">if</span> (!user)
+    <span class="kw">return</span> <span class="fn">notFound</span>(res, <span class="str">"User not found"</span>)
+
+  <span class="fn">success</span>(res, { <span class="obj">data</span>: user })
+})</code></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CTA ═══ -->
+<section style="padding: 100px 0;">
+  <div class="container text-center">
+    <h2 class="section-title">Ready to standardize your API?</h2>
+    <p class="section-desc center" style="margin-bottom: 40px;">Join developers who ship consistent APIs. Install in seconds.</p>
+    <div class="install-cmd" style="margin: 0 auto;">
+      <span class="dollar">$</span>
+      <span>npm i <span class="pkg">api-res-kit</span></span>
+      <span class="copy-icon">Copy</span>
+    </div>
+    <div style="margin-top: 24px; display: flex; gap: 16px; justify-content: center;">
+      <a href="https://www.npmjs.com/package/api-res-kit" target="_blank" class="btn btn-primary">View on npm</a>
+      <a href="https://github.com/Kamran534/DevOps/tree/main/open-source/api-response-kit" target="_blank" class="btn btn-secondary">
+        <svg viewBox="0 0 16 16" width="18" height="18" fill="currentColor" style="vertical-align: middle;"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+        Star on GitHub
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ Footer ═══ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-logo"><span>api-res-kit</span></div>
+    <p>Standardize your Node.js API responses.</p>
+    <div class="footer-links">
+      <a href="https://www.npmjs.com/package/api-res-kit" target="_blank">npm</a>
+      <a href="https://github.com/Kamran534/DevOps/tree/main/open-source/api-response-kit" target="_blank">GitHub</a>
+      <a href="#api">API Docs</a>
+      <a href="#start">Get Started</a>
+    </div>
+    <p style="margin-top: 24px; color: #3a3f52;">&copy; 2026 Kamran534. MIT License.</p>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>
