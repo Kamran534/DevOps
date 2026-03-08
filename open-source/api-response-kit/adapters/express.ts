@@ -1,11 +1,12 @@
 import { Request, Response, NextFunction } from "express"
-import { success, created, noContent } from "../src/success"
+import { success, created } from "../src/success"
 import { error, notFound, unauthorized, forbidden } from "../src/error"
 import { validationError } from "../src/validation"
 import { paginated } from "../src/pagination"
 import { ResponseOptions, ErrorOptions, ValidationErrorItem, PaginationOptions } from "../src/interfaces"
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace Express {
     interface Response {
       apiSuccess: <T>(options?: ResponseOptions<T>) => Response
