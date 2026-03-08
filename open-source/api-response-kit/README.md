@@ -2,7 +2,8 @@
 
 > Standardize your Node.js API responses with a consistent, type-safe format.
 
-[![CI](https://github.com/Kamran534/DevOps/actions/workflows/ci.yml/badge.svg)](https://github.com/Kamran534/DevOps/actions)
+[![CI](https://github.com/Kamran534/DevOps/actions/workflows/ci.yml/badge.svg)](https://github.com/Kamran534/DevOps/actions/workflows/ci.yml)
+[![npm version](https://img.shields.io/npm/v/api-res-kit.svg)](https://www.npmjs.com/package/api-res-kit)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## The Problem
