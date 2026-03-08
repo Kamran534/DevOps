@@ -1,5 +1,5 @@
 {
-  "name": "api-response-kit",
+  "name": "@kamran534055/api-response-kit",
   "version": "1.0.0",
   "description": "Standardize your Node.js API responses with a consistent format",
   "main": "dist/src/index.js",
